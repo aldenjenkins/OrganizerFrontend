@@ -4,7 +4,7 @@
     "slug": "aldenOrganizer",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "organizer"
+      "bundleIdentifier": "com.aldenjenkins.organizer"
     },
     "android": {
       "adaptiveIcon": {
