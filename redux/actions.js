@@ -138,8 +138,10 @@ export function reloadHabits() {
       const user = getState().user;
       const selectedDate = getState().habits.selectedDate;
       const args = { token: user.token, selectedDate };
-      const data = await organizerApi.fetchHabits(args);
-      dispatch(reloadHabitsSuccess(data));
+      let habits = await organizerApi.fetchHabits(args);
+      let habitCompletions = await organizerApi.fetchHabitCompletions(args);
+      console.log(habits, habitCompletions);
+      dispatch(reloadHabitsSuccess({ habits, habitCompletions }));
     } catch (e) {
       dispatch(reloadHabitsError(e));
       return { hasError: true, error: e };
@@ -165,7 +167,8 @@ function reloadHabitsSuccess(data) {
   return {
     type: FETCH_HABITS_SUCCESS,
     isUpdated: true,
-    data: data,
+    habits: data.habits,
+    habitCompletions: data.habitCompletions,
     error: {
       on: false,
       message: null,
@@ -354,7 +357,8 @@ export function completeHabitCompletion(item) {
         did_complete: !item.did_complete,
       };
       await organizerApi.completeHabitCompletion(args);
-      await dispatch(reloadHabitCompletions());
+      // await dispatch(reloadHabitCompletions());
+      await dispatch(reloadHabits());
       await dispatch(completeHabitSuccess());
     } catch (e) {
       console.log(e);
@@ -626,8 +630,8 @@ export function editHabit(args) {
       console.log(selectedDate);
       args = { ...args, token: user.token, selectedDate };
       await organizerApi.editHabit(args);
-      await dispatch(reloadHabitCompletions());
       await dispatch(reloadHabits());
+      // await dispatch(reloadHabitCompletions());
       await dispatch(editHabitSuccess());
     } catch (e) {
       return dispatch(editHabitError(e));
@@ -700,8 +704,8 @@ export function deleteHabit(habitId) {
       await organizerApi.deleteHabit(args);
       //await dispatch(switchHabitEditModalOpen());
       await dispatch(deleteHabitSuccess());
-      await dispatch(reloadHabitCompletions());
       await dispatch(reloadHabits());
+      // await dispatch(reloadHabitCompletions());
       await dispatch(switchHabitEditModalOpen());
     } catch (e) {
       return dispatch(deleteHabitError(e));
@@ -715,8 +719,8 @@ export function createHabit(formValues) {
       const user = getState().user;
       const args = { formValues, token: user.token };
       await organizerApi.createHabit(args);
-      await dispatch(reloadHabitCompletions());
       await dispatch(reloadHabits());
+      // await dispatch(reloadHabitCompletions());
       await dispatch(switchHabitCreationModalOpen());
       await dispatch(createHabitSuccess());
     } catch (e) {

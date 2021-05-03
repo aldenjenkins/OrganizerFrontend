@@ -10,7 +10,7 @@
     "test": "jest --watchAll",
     "build": "webpack --mode production",
     "deploy": "gh-pages -d web-build",
-    "copy": "cp ./CNAME ./build/CNAME",
+    "copy": "cp ./CNAME ./web-build/CNAME",
     "predeploy": "expo build:web && yarn copy"
   },
   "jest": {

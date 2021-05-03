@@ -25,7 +25,7 @@ import { ConnectedLoginForm } from "./LoginForm";
 import { ConnectedTodoEditForm } from "./TodoForm";
 
 function MyTextInput(props) {
-  const { input, meta, ...inputProps } = props;
+  const { input, meta, inputProps } = props;
 
   return (
     <TextInput
@@ -47,12 +47,13 @@ function HabitForm(props) {
       <Text>{props.mode === "edit" ? "Edit" : "Create"} Habit </Text>
       <Field
         name={"one_word_label"}
+        inputProps={{ maxLength: 32 }}
         placeholder={
           props.mode === "edit"
             ? props.options
               ? props.options.name
-              : "Your Habit here"
-            : "Your Habit Here"
+              : "one word label"
+            : "one word label"
         }
         value={
           props.mode === "edit" ? (props.options ? props.options.name : "") : ""
@@ -65,8 +66,8 @@ function HabitForm(props) {
           props.mode === "edit"
             ? props.options
               ? props.options.name_full
-              : "one word label"
-            : "one word label"
+              : "Your Habit here"
+            : "Your Habit Here"
         }
         value={
           props.mode === "edit"

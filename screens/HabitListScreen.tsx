@@ -56,11 +56,12 @@ class HabitListScreen extends Component {
   }
   componentDidMount() {
     this.props.reloadHabits();
-    this.props.reloadHabitCompletions();
+    // this.props.reloadHabitCompletions();
   }
   onRefresh = async () => {
     this.setState({ refreshing: true });
-    await this.props.reloadHabitCompletions();
+    await this.props.reloadHabits();
+    // await this.props.reloadHabitCompletions();
     this.setState({ refreshing: false });
   };
   render() {
@@ -70,7 +71,8 @@ class HabitListScreen extends Component {
       habitEditFormObject,
       createModalOpen,
       editModalOpen,
-      reloadHabitCompletions,
+      reloadHabits,
+      // reloadHabitCompletions,
       switchCreateModal,
       switchEditModal,
       completeHabitCompletion,
@@ -119,7 +121,7 @@ class HabitListScreen extends Component {
             <ConnectedHabitEditForm
               onSubmit={(formVals) => {
                 editHabit(formVals);
-                switchEditModal();
+                switchEditModal({});
               }}
               options={habitEditFormObject}
               initialValues={habitEditFormObject}
@@ -158,8 +160,8 @@ class HabitListScreen extends Component {
                   onDatePicked={(newDate) => {
                     if (newDate) {
                       habitDateChange(newDate);
-                      reloadHabitCompletions();
                       reloadHabits();
+                      // reloadHabitCompletions();
                     }
                   }}
                 />
@@ -173,8 +175,8 @@ class HabitListScreen extends Component {
             onDatePicked={(newDate) => {
               if (newDate) {
                 habitDateChange(newDate);
-                reloadHabitCompletions();
                 reloadHabits();
+                // reloadHabitCompletions();
               }
             }}
           />
@@ -231,7 +233,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     completeHabitCompletion: (id) => dispatch(completeHabitCompletion(id)),
     editHabit: (formVals) => dispatch(editHabit(formVals)),
-    reloadHabitCompletions: () => dispatch(reloadHabitCompletions()),
+    // reloadHabitCompletions: () => dispatch(reloadHabitCompletions()),
     reloadHabits: () => dispatch(reloadHabits()),
     deleteHabit: (id) => dispatch(deleteHabit(id)),
     switchCreateModal: () => dispatch(switchHabitCreationModalOpen()),

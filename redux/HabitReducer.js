@@ -53,7 +53,8 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_HABITS_SUCCESS:
       return {
         ...state,
-        habits: action.data,
+        habits: action.habits,
+        habitCompletions: action.habitCompletions,
         isFetched: true,
         error: {
           on: false,
