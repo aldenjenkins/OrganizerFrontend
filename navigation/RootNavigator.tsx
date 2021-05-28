@@ -21,8 +21,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 class RootNavigator extends Component {
   render() {
-    const { token } = this.props;
-    return token === null ? (
+    const { organizerToken, habitsToken } = this.props;
+    return organizerToken === null || habitsToken === null ? (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="SignIn" component={LoginScreen} />
       </Stack.Navigator>
@@ -40,7 +40,8 @@ class RootNavigator extends Component {
 }
 
 const mapStateToProps = (state: object) => ({
-  token: state.user.token,
+  organizerToken: state.user.organizerToken,
+  habitsToken: state.user.habitsToken,
 });
 
 export default connect(mapStateToProps)(RootNavigator);

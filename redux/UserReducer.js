@@ -14,8 +14,14 @@ import {
 
 const INITIAL_STATE = {
   isLoggedIn: false,
-  token: null,
-  info: {
+  organizerToken: null,
+  habitsToken: null,
+  organizerInfo: {
+    id: Math.random(),
+    username: "",
+    is_mod: false,
+  },
+  habitsInfo: {
     id: Math.random(),
     username: "",
     is_mod: false,
@@ -33,9 +39,11 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        info: { ...state.info, ...action.info },
+        organizerInfo: { ...state.organizerInfo, ...action.organizerInfo },
+        habitsInfo: { ...state.habitsInfo, ...action.habitsInfo },
         isLoggedIn: true,
-        token: action.token,
+        organizerToken: action.organizerToken,
+        habitsToken: action.habitsToken,
       };
     case LOGIN_ERROR:
       return { ...state, isLoading: false, error: action.error };

@@ -41,7 +41,10 @@ function MyTextInput(props) {
 }
 
 function JournalForm(props) {
-  const { text } = props;
+  let { text } = props;
+  if (text == null) {
+    text = "";
+  }
   return (
     <ScrollView keyboardShouldPersistTaps={"never"}>
       <Text>{props.mode === "edit" ? "Edit" : "Create"} Journal </Text>
@@ -101,14 +104,12 @@ const createSelector = formValueSelector("createJournal"); // <-- same as form n
 
 const mapEditStateToProps = (state) => {
   const text = editSelector(state, "text");
-  console.log(text);
   return {
     text,
   };
 };
 const mapCreateStateToProps = (state) => {
   const text = createSelector(state, "text");
-  console.log(text);
   return {
     text,
   };

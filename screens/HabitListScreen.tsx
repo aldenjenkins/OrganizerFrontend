@@ -169,17 +169,19 @@ class HabitListScreen extends Component {
             </Modal>
           </>
         )) || (
-          <SimplerDatePicker
-            maxDate={moment()}
-            date={moment(selectedDate)}
-            onDatePicked={(newDate) => {
-              if (newDate) {
-                habitDateChange(newDate);
-                reloadHabits();
-                // reloadHabitCompletions();
-              }
-            }}
-          />
+          <SafeAreaView style={{ height: 25 }}>
+            <SimplerDatePicker
+              maxDate={moment()}
+              date={moment(selectedDate)}
+              onDatePicked={(newDate) => {
+                if (newDate) {
+                  habitDateChange(newDate);
+                  reloadHabits();
+                  // reloadHabitCompletions();
+                }
+              }}
+            />
+          </SafeAreaView>
         )}
         <MaterialIcons
           name="add"

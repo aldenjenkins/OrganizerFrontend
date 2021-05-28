@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
 //	);
 //export default connect(mapStateToProps, mapDispatchToProps)(TabOneScreen);
 const mapStateToProps = (state: object) => ({
-  token: state.user.token,
   username: state.user.username,
   password: state.user.password,
 });

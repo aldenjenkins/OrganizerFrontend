@@ -84,7 +84,7 @@ export function reloadTodos() {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { token: user.token };
+      const args = { token: user.organizerToken };
       // let timesToRefresh = (localPosts.data.results.length / 20)
       const data = await organizerApi.fetchTodos(args);
       // let additional = data
@@ -104,9 +104,7 @@ export function reloadTodos() {
 }
 
 export function habitDateChange(selectedDate) {
-  console.log("DATE PRE FORMAT!!!!!!!!!!!!!!!!!!!", selectedDate);
   selectedDate = selectedDate.format("YYYY-MM-DD");
-  console.log("DATE POST FORMAT!!!!!!!!!!!!!!!!!!!", selectedDate);
   return {
     type: HABIT_DATE_CHANGED,
     selectedDate: selectedDate,
@@ -137,7 +135,7 @@ export function reloadHabits() {
     try {
       const user = getState().user;
       const selectedDate = getState().habits.selectedDate;
-      const args = { token: user.token, selectedDate };
+      const args = { token: user.habitsToken, selectedDate };
       let habits = await organizerApi.fetchHabits(args);
       let habitCompletions = await organizerApi.fetchHabitCompletions(args);
       console.log(habits, habitCompletions);
@@ -153,7 +151,7 @@ export function reloadHabitCompletions() {
     try {
       const user = getState().user;
       const selectedDate = getState().habits.selectedDate;
-      const args = { token: user.token, selectedDate };
+      const args = { token: user.habitsToken, selectedDate };
       const data = await organizerApi.fetchHabitCompletions(args);
       dispatch(reloadHabitCompletionsSuccess(data));
     } catch (e) {
@@ -206,7 +204,7 @@ export function reloadJournals() {
     try {
       // let timesToRefresh = (localPosts.data.results.length / 20)
       const user = getState().user;
-      const args = { token: user.token };
+      const args = { token: user.organizerToken };
       const data = await organizerApi.fetchJournals(args);
       // let additional = data
       // for (i = 1; i < timesToRefresh; i++){
@@ -279,7 +277,7 @@ function readJournalError(e) {
 //   return async (dispatch, getState) => {
 //     try {
 //       const user = getState().user;
-//       const args = { ...args, token: user.token };
+//       const args = { ...args, token: user.organizerToken };
 //       await organizerApi.editTodoEntry(args);
 //       await dispatch(reloadTodos(args));
 //     } catch (e) {
@@ -351,7 +349,7 @@ export function completeHabitCompletion(item) {
       const selectedDate = getState().habits.selectedDate;
       const user = getState().user;
       const args = {
-        token: user.token,
+        token: user.habitsToken,
         habitCompletionId: item.id,
         selectedDate,
         did_complete: !item.did_complete,
@@ -560,7 +558,6 @@ export function switchHabitEditModalOpen(habitObject) {
   if (!habitObject) {
     habitObject = {};
   }
-  console.log("!!!!HABIT OBJECT WHEN SWITCHING EDIT MODAL!!!!!", habitObject);
   return {
     type: HABIT_EDIT_MODAL_SWITCHED,
     habitEditFormObject: habitObject,
@@ -596,7 +593,7 @@ export function createTodo(formValues) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { formValues, token: user.token };
+      const args = { formValues, token: user.organizerToken };
       await organizerApi.createTodoEntry(args);
       await dispatch(switchTodoCreationModalOpen());
       await dispatch(createTodoSuccess());
@@ -611,7 +608,7 @@ export function createJournal(formValues) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { formValues, token: user.token };
+      const args = { formValues, token: user.organizerToken };
       await organizerApi.createJournalEntry(args);
       await dispatch(switchJournalCreationModalOpen());
       await dispatch(createJournalSuccess());
@@ -628,7 +625,7 @@ export function editHabit(args) {
       const user = getState().user;
       const selectedDate = getState().habits.selectedDate;
       console.log(selectedDate);
-      args = { ...args, token: user.token, selectedDate };
+      args = { ...args, token: user.habitsToken, selectedDate };
       await organizerApi.editHabit(args);
       await dispatch(reloadHabits());
       // await dispatch(reloadHabitCompletions());
@@ -642,7 +639,7 @@ export function editTodo(args) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      args = { ...args, token: user.token };
+      args = { ...args, token: user.organizerToken };
       await organizerApi.editTodoEntry(args);
       await dispatch(switchTodoEditModalOpen());
       await dispatch(editTodoSuccess());
@@ -656,7 +653,7 @@ export function editJournal(formValues) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { ...formValues, token: user.token };
+      const args = { ...formValues, token: user.organizerToken };
       await organizerApi.editJournalEntry(args);
       await dispatch(switchJournalEditModalOpen());
       await dispatch(editJournalSuccess());
@@ -671,7 +668,7 @@ export function deleteJournal(journalId) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { id: journalId, token: user.token };
+      const args = { id: journalId, token: user.organizerToken };
       await organizerApi.deleteJournalEntry(args);
       await dispatch(switchJournalEditModalOpen());
       await dispatch(deleteJournalSuccess());
@@ -685,7 +682,7 @@ export function deleteTodo(todoId) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { id: todoId, token: user.token };
+      const args = { id: todoId, token: user.organizerToken };
       await organizerApi.deleteTodoEntry(args);
       await dispatch(switchTodoEditModalOpen());
       await dispatch(deleteTodoSuccess());
@@ -700,7 +697,7 @@ export function deleteHabit(habitId) {
     try {
       const user = getState().user;
       const selectedDate = getState().habits.selectedDate;
-      const args = { id: habitId, token: user.token, selectedDate };
+      const args = { id: habitId, token: user.habitsToken, selectedDate };
       await organizerApi.deleteHabit(args);
       //await dispatch(switchHabitEditModalOpen());
       await dispatch(deleteHabitSuccess());
@@ -717,7 +714,7 @@ export function createHabit(formValues) {
   return async (dispatch, getState) => {
     try {
       const user = getState().user;
-      const args = { formValues, token: user.token };
+      const args = { formValues, token: user.habitsToken };
       await organizerApi.createHabit(args);
       await dispatch(reloadHabits());
       // await dispatch(reloadHabitCompletions());
@@ -729,17 +726,23 @@ export function createHabit(formValues) {
   };
 }
 
-export async function setTokenInStorage(token) {
+export async function setTokenInStorage(tokenName, token) {
   try {
-    await AsyncStorage.setItem("token", token);
+    await AsyncStorage.setItem(tokenName, token);
     return true;
   } catch (error) {
     throw error;
   }
 }
 
-export function loginSuccess({ user: info, token }) {
-  return { type: LOGIN_SUCCESS, info, token };
+export function loginSuccess(data) {
+  return {
+    type: LOGIN_SUCCESS,
+    organizerInfo: data.organizerInfo,
+    organizerToken: data.organizerToken,
+    habitsInfo: data.habitsInfo,
+    habitsToken: data.habitsToken,
+  };
 }
 
 function loginError(error) {
@@ -749,9 +752,17 @@ function loginError(error) {
 export function login(args) {
   return async (dispatch, getState) => {
     try {
-      const data = await organizerApi.login(args);
-      dispatch(loginSuccess(data));
-      setTokenInStorage(data.token);
+      const organizerData = await organizerApi.loginOrganizer(args);
+      const habitsData = await organizerApi.loginHabits(args);
+      const loginData = {
+        organizerToken: organizerData.token,
+        habitsToken: habitsData.token,
+        organizerInfo: organizerData.user,
+        habitsInfo: habitsData.user,
+      };
+      dispatch(loginSuccess(loginData));
+      await setTokenInStorage("organizerToken", organizerData.token);
+      await setTokenInStorage("habitsToken", habitsData.token);
       return true;
     } catch (error) {
       console.log("login error", error, { error });

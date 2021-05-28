@@ -57,7 +57,6 @@ class JournalListScreen extends Component {
 
   render() {
     const {
-      journals,
       switchEditModal,
       editModalOpen,
       createModalOpen,
@@ -68,6 +67,14 @@ class JournalListScreen extends Component {
       switchCreateModal,
       journalFormObject,
     } = this.props;
+    let { journals } = this.props;
+    if (journals != null) {
+      journals.forEach((item, index) => {
+        item.created = new Date(item.created);
+      });
+      journals.sort((a, b) => (a.created < b.created ? 1 : -1));
+    }
+
     if (!isFetched && this.state.refreshing)
       return (
         <SafeAreaView>
@@ -77,8 +84,12 @@ class JournalListScreen extends Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <Modal visible={createModalOpen} animationType="slide">
-          <SafeAreaView style={styles.modalContent}>
+        <Modal
+          style={{ flex: 1, flexDirection: "row" }}
+          visible={createModalOpen}
+          animationType="slide"
+        >
+          <SafeAreaView style={{ flex: 1, flexDirection: "column" }}>
             <MaterialIcons
               name="close"
               size={24}
@@ -90,7 +101,7 @@ class JournalListScreen extends Component {
           </SafeAreaView>
         </Modal>
         <Modal visible={editModalOpen} animationType="slide">
-          <SafeAreaView style={styles.modalContent}>
+          <SafeAreaView style={{ flex: 1, flexDirection: "column" }}>
             <MaterialIcons
               name="close"
               size={24}
@@ -145,9 +156,7 @@ class JournalListScreen extends Component {
               onPress={() => switchEditModal(item)}
             >
               <View>
-                <Text>{item.created}</Text>
-                <Text>{item.id}</Text>
-                <Markdown>{item.text}</Markdown>
+                <Text>{item.created.toLocaleDateString()}</Text>
               </View>
             </TouchableHighlight>
           )}

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+    flexDirection: "column",
   },
   container: {
     flex: 1,

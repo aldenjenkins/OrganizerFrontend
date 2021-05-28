@@ -119,14 +119,12 @@ const createSelector = formValueSelector("createHabit"); // <-- same as form nam
 
 const mapEditStateToProps = (state) => {
   const name = editSelector(state, "name");
-  console.log(name);
   return {
     name,
   };
 };
 const mapCreateStateToProps = (state) => {
   const name = createSelector(state, "name");
-  console.log(name);
   return {
     name,
   };

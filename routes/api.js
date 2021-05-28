@@ -1,20 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { Alert } from "react-native";
-import { connect } from "react-redux";
-import moment, { isMoment } from "moment";
-//import Qs from "qs";
-//const placesURL = "https://maps.googleapis.com/maps/api/place";
-//const geocodeURL = "https://maps.googleapis.com/maps/api/geocode";
-//let apiURL = "https://api.metoo.io";
-// apiURL = __DEV__ ? 'https://dev.metoo.io' : 'https://api.metoo.io'
-//const apiURL = __DEV__ ? "http://192.168.123.150:8000" : "https://api.metoo.io";
-const habitURL = "http://192.168.123.150:8001";
-const organizerURL = "http://192.168.123.150:8000";
-// axios.defaults.headers.common = {
-//     ...axios.defaults.headers.common,
-//     'Content-Type': 'application/x-www-form-urlencoded'
-// }
+const habitURL = "https://habitaccountability.aldenjenkins.com";
+const organizerURL = "https://personalorganizer.aldenjenkins.com";
 class OrganizerApi extends Component {
   constructor(props) {
     super(props);
@@ -23,33 +10,26 @@ class OrganizerApi extends Component {
         Authorization: `JWT ${token}`,
       },
     });
-    // this.state = {
-    //   token: null,
-    //   key: null,
-    //   user: null,
-    //   data: [],
-    //   error: false,
-    //   refreshing: false,
-    //   googleKey: "AIzaSyBdyBubLdxjcJXtjIsUp8vKQZEYOpDRk3M",
-    //   // url: __DEV__ ? 'https://dev.metoo.io' : 'https://api.metoo.io',
-    //   // url: __DEV__ ? 'http://localhost:8000' : 'https://api.metoo.io',
-    //   url: "https://api.metoo.io",
-    //   socketUrl:
-    //     __DEV__ && false
-    //       ? "ws://206.189.185.240:8080"
-    //       : "ws://206.189.185.240:8080", // 'ws://sicc.metoo.io:8080',
-    // };
   }
 
-  //	url = () => apiURL;
-  socketUrl = () => this.state.socketUrl;
   error = (error) => {
-    // console.log('api request error', window.__REMOTEDEV__ ? error.response : error)
     throw error;
     return { hasError: true, error: error.response };
   };
-  async login(args) {
+  async loginOrganizer(args) {
     const url = organizerURL.concat("/rest_auth/login/");
+    try {
+      const data = await axios.post(url, {
+        username: args.username,
+        password: args.password,
+      });
+      return data.data;
+    } catch (error) {
+      return this.error(error);
+    }
+  }
+  async loginHabits(args) {
+    const url = habitURL.concat("/rest_auth/login/");
     try {
       const data = await axios.post(url, {
         username: args.username,
@@ -294,41 +274,6 @@ class OrganizerApi extends Component {
       console.log("error", error.response);
     }
   }
-  //	async editMetooPost(args) {
-  //		try {
-  //			const url = apiURL.concat(`/metooposts/${args.id}/`);
-  //			const config = this.config(args.token);
-  //			const metooResponse = await axios.patch(url, args.info, config);
-  //			return metooResponse.data;
-  //		} catch (error) {
-  //			return this.error(error);
-  //		}
-  //	}
-  //
-  //	async submitMetooComment(args) {
-  //		try {
-  //			const config = this.config(args.token);
-  //			const url = apiURL.concat("/metoocomment/");
-  //			const data = await axios.post(
-  //				url,
-  //				{ post: args.postId, content: args.comment, mentioned_accounts: args.mentioned_accounts },
-  //				config
-  //			);
-  //			return data.data;
-  //		} catch (error) {
-  //			return this.error(error);
-  //		}
-  //	}
-  //	async deleteMetooComment(args) {
-  //		try {
-  //			const url = apiURL.concat(`/metoocomment/${args.commentId}/`);
-  //			const config = this.config(args.token);
-  //			const metooResponse = await axios.delete(url, config);
-  //			return metooResponse;
-  //		} catch (error) {
-  //			return this.error(error);
-  //		}
-  //	}
 
   async fetchUserFriends(args) {
     try {
